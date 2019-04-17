@@ -4,10 +4,11 @@ import "openzeppelin-solidity/contracts/token/ERC20/ERC20.sol";
 import "./SafeMath.sol";
 
 
+/
 /**
  * @title ProjectContract
  * @dev This contract defines the token associated to the asset and the rules of
- * payment splitting. 
+ * payment splitting.
  */
 
 contract ProjectContract is ERC20 {
@@ -19,7 +20,7 @@ contract ProjectContract is ERC20 {
   uint256 private _totalReleased;
 
   mapping(address => uint256) private _released;
-  address[] private _investors;
+  address payable[] private _investors;
 
   /** Token creation */
 
@@ -35,10 +36,10 @@ contract ProjectContract is ERC20 {
    */
   function () external payable {
       emit PaymentReceived(msg.sender, msg.value);
-      // Received Payment is splitted among investors
-      for (uint256 i = 0; i < _investors.length; i++) {
-            release(_investors[i]);
-      }
+  }
+
+  function contractBalance() public view returns (uint256) {
+      return address(this).balance;
   }
 
   /**
@@ -61,7 +62,7 @@ contract ProjectContract is ERC20 {
    * @dev Triggers a transfer to `account` of the amount of Ether they are owed, according to their percentage of the
    * total shares and their previous withdrawals.
    */
-  function release(address payable account) private {
+  function release(address payable account) public {
       require(balanceOf(account) > 0);
 
       uint256 totalReceived = address(this).balance.add(_totalReleased);
