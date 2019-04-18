@@ -1,26 +1,35 @@
 pragma solidity ^0.5.0;
 
 import "openzeppelin-solidity/contracts/token/ERC20/ERC20.sol";
-import "./SafeMath.sol";
+import "openzeppelin-solidity/contracts/token/ERC20/ERC20Detailed.sol";
+import "openzeppelin-solidity/contracts/math/SafeMath.sol";
 
-
-/
 /**
  * @title ProjectContract
  * @dev This contract defines the token associated to the asset and the rules of
  * payment splitting.
  */
 
-contract ProjectContract is ERC20 {
+contract ProjectContract is ERC20, ERC20Detailed {
   using SafeMath for uint256;
 
   event PaymentReleased(address to, uint256 amount);
   event PaymentReceived(address from, uint256 amount);
 
+  uint8 public constant DECIMALS = 18;
+  uint256 public constant INITIAL_SUPPLY = 10000 * (10 ** uint256(DECIMALS));
+
   uint256 private _totalReleased;
 
   mapping(address => uint256) private _released;
   address payable[] private _investors;
+
+  /**
+   * @dev Constructor that gives msg.sender all of existing tokens.
+   */
+  constructor () public ERC20Detailed("SimpleToken", "SIM", DECIMALS) {
+      _mint(msg.sender, INITIAL_SUPPLY);
+  }
 
   /** Token creation */
 
