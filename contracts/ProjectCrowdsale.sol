@@ -9,20 +9,16 @@ import 'openzeppelin-solidity/contracts/token/ERC20/ERC20Detailed.sol';
 contract ProjectCrowdsale is CappedCrowdsale, WhitelistedDevelopers, WhitelistedInvestors {
   using SafeMath for uint256;
 
-  ERC20Detailed private _token = new ProjectToken('House', 'HOU', 18, 10000);
-
-  mapping(address => uint256) private _released;
-  address payable[] private _investors;
-
   constructor (
       uint256 _rate,
       address payable _wallet,
+      address _token,
       uint256 _cap
     )
       public
-      Crowdsale(_rate, _wallet, _token)
+      Crowdsale(_rate, _wallet, IERC20(_token))
       CappedCrowdsale(_cap)
-      onlyWhitelistedDevelopers
+      //onlyWhitelistedDevelopers
   {
   }
 
@@ -32,6 +28,6 @@ contract ProjectCrowdsale is CappedCrowdsale, WhitelistedDevelopers, Whitelisted
   }
 
   function balanceOf(address owner) public view returns (uint256){
-      return _token.balanceOf(owner);
+      return token().balanceOf(owner);
   }
 }
