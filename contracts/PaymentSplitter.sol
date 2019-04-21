@@ -1,10 +1,10 @@
-pragma solidity ^0.5.3;
+pragma solidity ^0.5.2;
+import "https://github.com/OpenZeppelin/openzeppelin-solidity/contracts/access/roles/WhitelistAdminRole.sol";
+import "https://github.com/OpenZeppelin/openzeppelin-solidity/contracts/math/Math.sol";
+import "https://github.com/OpenZeppelin/openzeppelin-solidity/contracts/token/ERC20/IERC20.sol";
 
-import "./SafeMath.sol";
-import "./WhitelistAdminRole.sol";
-import "./ProjectCrowdsale.sol";
 import './ProjectToken.sol';
-import './IERC20.sol';
+
 
 /**
  * @title PaymentSplitter
@@ -20,15 +20,13 @@ contract PaymentSplitter {
     uint256 private _totalReleased;
     mapping(address => uint256) private _released;
 
-    ProjectCrowdsale private _crowdsalecontract;
     IERC20 private _token;
 
     /**
      * @dev Constructor
      */
-    constructor (address contractAddress) public payable {
-        _crowdsalecontract = ProjectCrowdsale(contractAddress);
-        _token = IERC20(_crowdsalecontract.token());
+    constructor (address token) public payable {
+        _token = IERC20(token);
     }
 
     /**
@@ -64,6 +62,10 @@ contract PaymentSplitter {
      */
     function released(address account) public view returns (uint256) {
         return _released[account];
+    }
+
+    function balance() public view returns(uint256){
+        return address(this).balance;
     }
 
     /**

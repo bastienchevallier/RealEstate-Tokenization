@@ -1,7 +1,7 @@
 pragma solidity ^0.5.0;
 
-import 'openzeppelin-solidity/contracts/token/ERC20/ERC20.sol';
-import 'openzeppelin-solidity/contracts/token/ERC20/ERC20Detailed.sol';
+import "https://github.com/OpenZeppelin/openzeppelin-solidity/contracts/token/ERC20/ERC20Detailed.sol";
+import "https://github.com/OpenZeppelin/openzeppelin-solidity/contracts/token/ERC20/ERC20.sol";
 
 /**
  * @title ProjectToken
@@ -25,4 +25,5 @@ contract ProjectToken is ERC20, ERC20Detailed {
     {
       _mint(msg.sender, INITIAL_SUPPLY*(10**uint256(DECIMALS)));
     }
+
 }
